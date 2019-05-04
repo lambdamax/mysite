@@ -1,0 +1,40 @@
+{% extends 'blog/base.html' %}
+
+
+{% block body_attribs %}
+    class="user-select"
+{% endblock body_attribs %}
+
+{% block content %}
+    {% include 'blog/articles_list.html' %}
+{% endblock content %}
+
+{% block sidebar %}
+    <div class="fixed">
+        <div class="widget widget_search">
+            <form class="navbar-form" action="{{ url('list',catalog='search') }}" method="GET">
+                <div class="input-group">
+                    <input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字"
+                           maxlength="15" autocomplete="off">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default btn-search" type="submit">搜索</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div class="widget widget_sentence">
+            <h3>标签云</h3>
+            <div class="widget-sentence-content">
+                <ul class="plinks ptags">
+                    {% for tag in tags %}
+                        <li><a href="{{ url('list',catalog=para.catalog) }}?tag={{ tag.name }}" title="{{ tag.name }}"
+                               draggable="false">
+                            {{ tag.name }}&nbsp;
+                            <span class="badge">{{ tag.count_id }}</span>
+                        </a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock sidebar %}

@@ -1,0 +1,9 @@
+*/migrations
+*/.DS_Store
+*.pyc
+*.conf
+blog/static/blog/uploads/*
+venv
+.idea
+__pycache__
+.ipynb_checkpoints

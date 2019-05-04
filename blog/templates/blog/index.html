@@ -1,0 +1,60 @@
+{% extends 'blog/base.html' %}
+
+
+{% block body_attribs %}
+    class="user-select"
+{% endblock body_attribs %}
+
+{% block content %}
+    <div id="focusslide" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-target="#focusslide" data-slide-to="0" class="active"></li>
+            <li data-target="#focusslide" data-slide-to="1"></li>
+            <li data-target="#focusslide" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner" role="listbox">
+            <div class="item active">
+                <a href="#" title="人工智能">
+                    <img src="{{ static('/blog/images/ai001.jpg') }}" alt="人工智能"
+                         class="img-responsive" style="width: 825px;height: 200px"></a>
+            </div>
+            <div class="item">
+                <a href="#" title="python编程">
+                    <img src="{{ static('/blog/images/pyedit002.jpg') }}" alt="python编程"
+                         class="img-responsive" style="width: 825px;height: 200px"></a>
+            </div>
+            <div class="item">
+                <a href="#" title="python logo">
+                    <img src="{{ static('/blog/images/logo003.png') }}" alt="python logo"
+                         class="img-responsive" style="width: 825px;height: 200px"></a>
+            </div>
+        </div>
+        <a class="left carousel-control" href="#focusslide" role="button" data-slide="prev" rel="nofollow">
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            <span class="sr-only">上一个</span>
+        </a>
+        <a class="right carousel-control" href="#focusslide" role="button" data-slide="next" rel="nofollow">
+            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+            <span class="sr-only">下一个</span>
+        </a>
+    </div>
+    {% for recommand in recommands %}
+        <article class="excerpt-minic excerpt-minic-index">
+            <h2><span class="red">【推荐】</span>
+                <a href="{{ url('detail',num=article.id) }}" title="{{ recommand.name }}">
+                    {{ recommand.name }}
+                </a>
+            </h2>
+            <p class="note">
+                {{ article.body|truncate(100, True) }}
+            </p>
+        </article>
+    {% endfor %}
+
+    {% include 'blog/articles_list.html' %}
+{% endblock content %}
+
+{% block sidebar %}
+    {% include 'blog/notepad.html' %}
+{% endblock sidebar %}
+

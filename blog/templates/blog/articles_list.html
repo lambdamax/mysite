@@ -1,0 +1,41 @@
+<div class="title">
+    <h3>{{ para.title }}</h3>
+</div>
+{% for article in articles %}
+    <article class="excerpt excerpt-1" style="">
+        <a class="focus" href="{{ url('detail',num=article.id) }}" title="{{ article.name }}">
+            <img class="thumb" data-original="{{ article.photo.url }}"
+                 src="{{ article.photo.url }}"
+                 alt="{{ article.name }}" style="display: inline;">
+        </a>
+        <header>
+            <a class="cat" href="{{ url('detail',num=article.id) }}"
+               title="{{ article.catalog.name }}">{{ article.catalog.name }}<i></i></a>
+            <h2>
+                {% if article.order_id %}<span style="color: red">【置顶】</span>{% endif %}
+                <a href="{{ url('detail',num=article.id) }}"
+                   title="{{ article.name }}">{{ article.name }}</a>
+            </h2>
+        </header>
+        <p class="meta">
+            <time class="time"><i class="glyphicon glyphicon-time"></i>
+                {{ dj.date(article.create_date,"Y-m-d") }}</time>
+            <span class="views"><i class="glyphicon glyphicon-eye-open"></i> {{ article.visited }}</span>
+            <a class="comment" href="{{ url('detail',num=article.id) }}#comment" title="评论">
+                <i class="glyphicon glyphicon-comment"></i> {{ article.comments.all()|length }}
+            </a>
+        </p>
+        <p class="note">{{ article.body|truncate(100, True) }}</p>
+    </article>
+{% endfor %}
+{% if not para.keyword %}
+    <nav class="pagination" style="display: none;">
+        <ul>
+            {% if left %}
+                <li class="next-page">
+                    <a href="/blog/{{ para.url }}?page={{ page + 1 }}&tag={{ para.tag }}"></a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
