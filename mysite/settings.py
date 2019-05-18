@@ -149,7 +149,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'blog/static'),
 ]
 
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = BASE_DIR
 MEDIA_URL = '/media/'
 
 # LOGGING = {
