@@ -27,8 +27,8 @@ def environment(**options):
 
 def context(request):
     links = Link.objects.all()
-    hot_articles = Articles.objects.filter(comment__id__isnull=False).annotate(comment_id=Max('comment__id')).order_by(
-        '-comment_id')[:6]
+    hot_articles = Articles.objects.filter(comment__id__isnull=False, active=True).annotate(
+        comment_id=Max('comment__id')).order_by('-comment_id')[:6]
     catalogs = Catalog.objects.all()
     ctx = {
         'links': links,
@@ -60,9 +60,9 @@ def index(request):
     para = {'page': int(para.get('page', 1)),
             'url': para.get('url', 'index'),
             'title': para.get('title', '最新发布'), }
-    articles = Articles.objects.all()[g['from_page']:g['to_page']]
-    recommands = Articles.objects.filter(recommand=True).order_by('order_id')
-    rows_left = len(Articles.objects.all()[g['next_page']:])
+    articles = Articles.objects.all(active=True)[g['from_page']:g['to_page']]
+    recommands = Articles.objects.filter(active=True, recommand=True).order_by('order_id')
+    rows_left = len(Articles.objects.all(active=True)[g['next_page']:])
     g.update({'articles': articles,
               'recommands': recommands,
               'para': para,
@@ -74,7 +74,7 @@ def detail(request, num):
     g = context(request)
     para = request.GET.dict()
     para.update(request.POST.dict())
-    article = Articles.objects.get(id=num)
+    article = Articles.objects.get(active=True, id=num)
     article.body = markdown.markdown(article.body, extensions=[
         'markdown.extensions.extra',
         'markdown.extensions.codehilite',
@@ -122,7 +122,7 @@ def catalog_list(request, catalog):
         'catalog__name_eng': None if catalog == 'search' else catalog
     }
     params_articles = {k: v for k, v in params_articles.items() if v}
-    articles = Articles.objects.filter(**params_articles)
+    articles = Articles.objects.filter(active=True, **params_articles)
     now_articles = articles[g['pagesize'] * (para['page'] - 1):g['pagesize'] * (para['page'])]
     rows_left = len(articles[g['pagesize'] * (para['page']) + 1:])
 

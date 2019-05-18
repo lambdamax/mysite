@@ -97,8 +97,8 @@ class Articles(Common):
     visited = models.IntegerField(default=0)
     photo = models.ImageField(upload_to='blog/static/blog/uploads', null=True, blank=True)
     catalog = models.ForeignKey(Catalog, related_name='articles', on_delete=models.CASCADE, db_index=False)
-    recommand = models.CharField(max_length=1, null=True, blank=True)
-    active = models.CharField(max_length=1, null=True, blank=True)
+    recommand = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
     order_id = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag, through='Articleship', through_fields=('article', 'tag'))
 
