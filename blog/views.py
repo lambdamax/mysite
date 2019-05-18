@@ -60,9 +60,9 @@ def index(request):
     para = {'page': int(para.get('page', 1)),
             'url': para.get('url', 'index'),
             'title': para.get('title', '最新发布'), }
-    articles = Articles.objects.all(active=True)[g['from_page']:g['to_page']]
+    articles = Articles.objects.filter(active=True)[g['from_page']:g['to_page']]
     recommands = Articles.objects.filter(active=True, recommand=True).order_by('order_id')
-    rows_left = len(Articles.objects.all(active=True)[g['next_page']:])
+    rows_left = len(Articles.objects.filter(active=True)[g['next_page']:])
     g.update({'articles': articles,
               'recommands': recommands,
               'para': para,
