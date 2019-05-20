@@ -109,7 +109,7 @@ def post_comment(request):
 def catalog_list(request, catalog):
     g = context(request)
     para = request.GET.dict()
-    catalog_name = g['catalogs'].get(name_eng=catalog).name
+    catalog_name = g['catalogs'].get(name_eng=catalog).name if catalog != 'search' else catalog
     para.update({'title': catalog_name,
                  'page': int(para.get('page', 1)),
                  'catalog': catalog,
