@@ -38,11 +38,11 @@
             <span class="sr-only">下一个</span>
         </a>
     </div>
-    {% for recommand in recommands %}
+    {% for article in recommands %}
         <article class="excerpt-minic excerpt-minic-index">
             <h2><span class="red">【推荐】</span>
-                <a href="{{ url('detail',num=article.id) }}" title="{{ recommand.name }}">
-                    {{ recommand.name }}
+                <a href="{{ url('detail',num=article.id) }}" title="{{ article.name }}">
+                    {{ article.name }}
                 </a>
             </h2>
             <p class="note">
