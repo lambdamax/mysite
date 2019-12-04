@@ -25,7 +25,7 @@
         <form class="navbar-form" action="{{ url('list',catalog='search') }}" method="GET">
             <div class="input-group">
                 {{ csrf_input }}
-                <input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字"
+                <input type="text" name="keyword" class="form-control" size="35" placeholder="输入关键字查找相关文章"
                        maxlength="15" autocomplete="off">
                 <span class="input-group-btn">
             <button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
