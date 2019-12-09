@@ -55,11 +55,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# MIDDLEWARE_CLASSES = ['dwebsocket.middleware.WebSocketMiddleware']
-# WEBSOCKET_FACTORY_CLASS = 'dwebsocket.backends.uwsgi.factory.uWsgiWebSocketFactory'
-#
-# # 可以允许每一个单独的视图实用websockets
-# WEBSOCKET_ACCEPT_ALL = True
+MIDDLEWARE_CLASSES = ['dwebsocket.middleware.WebSocketMiddleware']
+
+# 可以允许每一个单独的视图实用websockets
+WEBSOCKET_ACCEPT_ALL = True
 
 ROOT_URLCONF = 'mysite.urls'
 

@@ -28,6 +28,7 @@ urlpatterns = [
     re_path(r'media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
     # markdown
     path('mdeditor/', include('mdeditor.urls')),
+    path('wb', views.wb, name='wb'),
 ]
 
 # handler500 = 'blog.views.page_500'

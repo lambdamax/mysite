@@ -22,6 +22,5 @@ urlpatterns = [
     path('detail/<int:num>', views.detail, name='detail'),
     path('comment/', views.post_comment, name='comment'),
     path('<str:catalog>', views.catalog_list, name='list'),
-    path('test', views.test, name='wb'),
 ]
 

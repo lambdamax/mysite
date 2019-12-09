@@ -139,25 +139,14 @@ def catalog_list(request, catalog):
     return render(request, 'blog/list.html', context=g)
 
 
-from dwebsocket import accept_websocket,require_websocket
+from dwebsocket import require_websocket
 
-def modify_message(message):
-    return message.lower()
 
-# @accept_websocket
-# def path(request):
-#     if not request.is_websocket():
-#         message = request.GET['message']
-#         message = modify_message(message)
-#         return HttpResponse(message)
-#     else:
-#         for message in request.websocket:
-#             message = modify_message(message)
-#             request.websocket.send(message)
-
-# @accept_websocket
-def test(request):
-    return
-    print(123)
+@require_websocket
+def wb(request):
+    import time
     message = request.websocket.wait()
-    request.websocket.send(message)
+    while 1:
+        print(message)
+        request.websocket.send(message)
+        time.sleep(5)
