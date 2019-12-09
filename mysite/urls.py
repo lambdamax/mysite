@@ -27,8 +27,8 @@ urlpatterns = [
     # 上传图片预览
     re_path(r'media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
     # markdown
-    path('mdeditor/', include('mdeditor.urls'))
+    path('mdeditor/', include('mdeditor.urls')),
 ]
 
-handler500 = 'blog.views.page_500'
+# handler500 = 'blog.views.page_500'
 # handler404 = 'blog.views.page_404'

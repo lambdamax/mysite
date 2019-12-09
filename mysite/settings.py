@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '8mdn*$xty8kp3=m@mg^(y96k=_vufb-ljy0+d5*kgq#gp=)7eh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -36,11 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'mdeditor'
+    'mdeditor',
+    'dwebsocket'
 ]
 
 # *model Users inherit from AbstractUser
 AUTH_USER_MODEL = 'blog.Users'
+
+import dwebsocket
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -51,6 +54,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# MIDDLEWARE_CLASSES = ['dwebsocket.middleware.WebSocketMiddleware']
+# WEBSOCKET_FACTORY_CLASS = 'dwebsocket.backends.uwsgi.factory.uWsgiWebSocketFactory'
+#
+# # 可以允许每一个单独的视图实用websockets
+# WEBSOCKET_ACCEPT_ALL = True
 
 ROOT_URLCONF = 'mysite.urls'
 
