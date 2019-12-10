@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django.db.models import Max, Count
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie,csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 import markdown
 from jinja2 import Environment
 
@@ -146,11 +146,19 @@ def get_token(request):
     token = get_token(request)
     return HttpResponse(token)
 
+
 def sinaspider(request):
+    """
+    爬虫写表
+    :param request:
+    :return:
+    """
     from .models import SinaStock, SinaFutures
     para = request.POST.dict()
-    # SinaStock(**para)
-
+    para.pop('csrfmiddlewaretoken')
+    title = para.pop('title')
+    item = SinaStock(**para) if title == 'stock' else SinaFutures(**para)
+    item.save()
     return HttpResponse('ok')
 
 
