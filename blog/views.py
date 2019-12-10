@@ -6,6 +6,8 @@ from django.template import defaultfilters
 from django.urls import reverse
 from django.utils.html import format_html
 from django.db.models import Max, Count
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie,csrf_exempt
 import markdown
 from jinja2 import Environment
 
@@ -137,6 +139,19 @@ def catalog_list(request, catalog):
               'para': para,
               'left': rows_left})
     return render(request, 'blog/list.html', context=g)
+
+
+def get_token(request):
+    from django.middleware.csrf import get_token
+    token = get_token(request)
+    return HttpResponse(token)
+
+def sinaspider(request):
+    from .models import SinaStock, SinaFutures
+    para = request.POST.dict()
+    # SinaStock(**para)
+
+    return HttpResponse('ok')
 
 
 from dwebsocket import require_websocket

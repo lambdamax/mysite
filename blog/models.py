@@ -148,3 +148,35 @@ class Comment(Common):
 
     def __str__(self):
         return str(self.id) + '--' + self.article.name
+
+
+class SinaStock(Common):
+    name = models.CharField(max_length=50, db_index=True)
+    price = models.FloatField()
+    rate = models.FloatField()
+    range = models.FloatField()
+    quantity = models.FloatField()
+    amount = models.FloatField()
+
+    class Meta:
+        db_table = 'blog_stock'
+        ordering = ["-id"]
+        verbose_name_plural = _(u"大盘指数")
+        app_label = 'blog'
+
+    def __str__(self):
+        return str(self.id) + '--' + self.name
+
+
+class SinaFutures(Common):
+    name = models.CharField(max_length=50, db_index=True)
+    price = models.FloatField()
+
+    class Meta:
+        db_table = 'blog_future'
+        ordering = ["-id"]
+        verbose_name_plural = _(u"期货指数")
+        app_label = 'blog'
+
+    def __str__(self):
+        return str(self.id) + '--' + self.name

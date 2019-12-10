@@ -23,4 +23,3 @@ urlpatterns = [
     path('comment/', views.post_comment, name='comment'),
     path('<str:catalog>', views.catalog_list, name='list'),
 ]
-

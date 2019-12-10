@@ -29,6 +29,8 @@ urlpatterns = [
     # markdown
     path('mdeditor/', include('mdeditor.urls')),
     path('wb', views.wb, name='wb'),
+    path('api/sinaspider', views.sinaspider, name='sinaspider'),
+    path('api/_get_token', views.get_token, name='gettoken'),
 ]
 
 # handler500 = 'blog.views.page_500'
