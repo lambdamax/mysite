@@ -1,47 +1,33 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, AbstractBaseUser
+from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
 from mdeditor.fields import MDTextField
-from mysite.settings import AUTH_USER_MODEL
+
+
+# from mysite.settings import AUTH_USER_MODEL
 
 
 # Create your models here.
+
+class User(AbstractUser):
+    class Meta:
+        abstract = False
+
 
 class Common(models.Model):
     """
     common model
     """
-    create_user = models.ForeignKey(AUTH_USER_MODEL, related_name='%(app_label)s_%(class)s_create_user', db_index=False,
-                                    on_delete=models.CASCADE, verbose_name='创建人', null=True, blank=True)
+    create_user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s_create_user', db_index=False,
+                                    on_delete=models.SET_NULL, verbose_name='创建人', null=True, blank=True)
     create_date = models.DateTimeField(verbose_name='创建时间', auto_now_add=True, null=True, blank=True)
-    write_user = models.ForeignKey(AUTH_USER_MODEL, verbose_name='修改人', on_delete=models.CASCADE, null=True, blank=True,
+    write_user = models.ForeignKey(User, verbose_name='修改人', on_delete=models.SET_NULL, null=True, blank=True,
                                    db_index=False, related_name='%(app_label)s_%(class)s_write_user')
     write_date = models.DateTimeField(verbose_name='修改时间', auto_now=True, null=True, blank=True)
 
     class Meta:
         abstract = True
-
-
-class Role(Common):
-    name = models.CharField(max_length=200)
-
-    class Meta:
-        db_table = 'role'
-        ordering = ["-id"]
-        verbose_name_plural = _(u"角色")
-
-    def __str__(self):
-        return self.name
-
-
-class Users(AbstractUser, Common):
-    role = models.ForeignKey(Role, related_name='users', on_delete=models.CASCADE, null=True, blank=True,
-                             db_index=False)
-
-    class Meta:
-        db_table = 'users'
-        verbose_name_plural = _(u"user")
 
 
 class Catalog(Common):
@@ -96,7 +82,8 @@ class Articles(Common):
     body = MDTextField('内容')
     visited = models.IntegerField(default=0)
     photo = models.ImageField(upload_to='blog/static/blog/uploads', null=True, blank=True)
-    catalog = models.ForeignKey(Catalog, related_name='articles', on_delete=models.CASCADE, db_index=False)
+    catalog = models.ForeignKey(Catalog, related_name='articles', on_delete=models.SET_NULL,
+                                null=True, blank=True, db_index=False)
     recommand = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
     order_id = models.IntegerField(default=0)

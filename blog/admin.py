@@ -31,7 +31,7 @@ class ArticlesAdmin(admin.ModelAdmin):
 # admin.site.register(models.Articles)
 
 admin.site.register(models.Catalog)
-admin.site.register(models.Users)
-admin.site.register(models.Role)
+admin.site.register(models.User)
+# admin.site.register(models.Role)
 admin.site.register(models.Comment)
 admin.site.register(models.Link)
