@@ -1,3 +1,4 @@
+dwebsocket
 Django==2.2
 django-mdeditor==0.1.13
 Jinja2==2.10

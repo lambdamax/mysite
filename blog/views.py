@@ -6,10 +6,9 @@ from django.template import defaultfilters
 from django.urls import reverse
 from django.utils.html import format_html
 from django.db.models import Max, Count
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 import markdown
 from jinja2 import Environment
+from dwebsocket import require_websocket
 
 
 def tp_reverse(viewname, urlconf=None, args=None, kwargs=None, current_app=None, **kw):
@@ -162,14 +161,10 @@ def sinaspider(request):
     return HttpResponse('ok')
 
 
-from dwebsocket import require_websocket
-
-
 @require_websocket
 def wb(request):
     import time
     message = request.websocket.wait()
     while 1:
-        print(message)
         request.websocket.send(message)
         time.sleep(5)

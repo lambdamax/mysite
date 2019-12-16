@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from mdeditor.fields import MDTextField
 
 
-# from mysite.settings import AUTH_USER_MODEL
+from mysite.settings import AUTH_USER_MODEL
 
 
 # Create your models here.
@@ -19,10 +19,10 @@ class Common(models.Model):
     """
     common model
     """
-    create_user = models.ForeignKey(User, related_name='%(app_label)s_%(class)s_create_user', db_index=False,
+    create_user = models.ForeignKey(AUTH_USER_MODEL, related_name='%(app_label)s_%(class)s_create_user', db_index=False,
                                     on_delete=models.SET_NULL, verbose_name='创建人', null=True, blank=True)
     create_date = models.DateTimeField(verbose_name='创建时间', auto_now_add=True, null=True, blank=True)
-    write_user = models.ForeignKey(User, verbose_name='修改人', on_delete=models.SET_NULL, null=True, blank=True,
+    write_user = models.ForeignKey(AUTH_USER_MODEL, verbose_name='修改人', on_delete=models.SET_NULL, null=True, blank=True,
                                    db_index=False, related_name='%(app_label)s_%(class)s_write_user')
     write_date = models.DateTimeField(verbose_name='修改时间', auto_now=True, null=True, blank=True)
 

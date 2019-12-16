@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'dwebsocket'
 ]
 
-# *model Users inherit from AbstractUser
+# model Users inherit from AbstractUser
 AUTH_USER_MODEL = 'blog.User'
 
 import dwebsocket
