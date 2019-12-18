@@ -4,7 +4,6 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
 from mdeditor.fields import MDTextField
 
-
 from mysite.settings import AUTH_USER_MODEL
 
 
@@ -22,7 +21,8 @@ class Common(models.Model):
     create_user = models.ForeignKey(AUTH_USER_MODEL, related_name='%(app_label)s_%(class)s_create_user', db_index=False,
                                     on_delete=models.SET_NULL, verbose_name='创建人', null=True, blank=True)
     create_date = models.DateTimeField(verbose_name='创建时间', auto_now_add=True, null=True, blank=True)
-    write_user = models.ForeignKey(AUTH_USER_MODEL, verbose_name='修改人', on_delete=models.SET_NULL, null=True, blank=True,
+    write_user = models.ForeignKey(AUTH_USER_MODEL, verbose_name='修改人', on_delete=models.SET_NULL, null=True,
+                                   blank=True,
                                    db_index=False, related_name='%(app_label)s_%(class)s_write_user')
     write_date = models.DateTimeField(verbose_name='修改时间', auto_now=True, null=True, blank=True)
 
@@ -138,12 +138,12 @@ class Comment(Common):
 
 
 class SinaStock(Common):
-    name = models.CharField(max_length=50, db_index=True)
-    price = models.FloatField()
-    rate = models.FloatField()
-    range = models.FloatField()
-    quantity = models.FloatField()
-    amount = models.FloatField()
+    name = models.CharField(max_length=50, db_index=True, null=True, blank=True)
+    price = models.FloatField(verbose_name='现价', null=True, blank=True)
+    rate = models.FloatField(verbose_name='涨幅%', null=True, blank=True)
+    range = models.FloatField(verbose_name='涨幅', null=True, blank=True)
+    quantity = models.FloatField(verbose_name='成交量', null=True, blank=True)
+    amount = models.FloatField(verbose_name='成交金额', null=True, blank=True)
 
     class Meta:
         db_table = 'blog_stock'
@@ -156,8 +156,10 @@ class SinaStock(Common):
 
 
 class SinaFutures(Common):
-    name = models.CharField(max_length=50, db_index=True)
-    price = models.FloatField()
+    name = models.CharField(max_length=50, db_index=True, null=True, blank=True)
+    price = models.FloatField(verbose_name='现价', null=True, blank=True)
+    rate = models.FloatField(verbose_name='涨幅%', null=True, blank=True)
+    range = models.FloatField(verbose_name='涨幅', null=True, blank=True)
 
     class Meta:
         db_table = 'blog_future'

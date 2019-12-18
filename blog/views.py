@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_list_or_404
-from django.http import HttpResponse
-from .models import Articles, Link, Tag, Comment, Catalog
+from django.http import HttpResponse, JsonResponse
+from .models import *
 from django.templatetags.static import static
 from django.template import defaultfilters
 from django.urls import reverse
@@ -9,6 +9,9 @@ from django.db.models import Max, Count
 import markdown
 from jinja2 import Environment
 from dwebsocket import require_websocket
+from datetime import datetime
+import time
+import json
 
 
 def tp_reverse(viewname, urlconf=None, args=None, kwargs=None, current_app=None, **kw):
@@ -152,7 +155,6 @@ def sinaspider(request):
     :param request:
     :return:
     """
-    from .models import SinaStock, SinaFutures
     para = request.POST.dict()
     para.pop('csrfmiddlewaretoken')
     title = para.pop('title')
@@ -161,10 +163,25 @@ def sinaspider(request):
     return HttpResponse('ok')
 
 
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        try:
+            if isinstance(o, datetime):
+                return datetime.strftime(o, '%Y-%m-%d %H:%M')
+        except:
+            return json.JSONEncoder.default(self, o)
+
+
+def dumps(data):
+    result = json.dumps(data, cls=JSONEncoder, indent=2)
+    return result
+
+
 @require_websocket
 def wb(request):
-    import time
     message = request.websocket.wait()
     while 1:
-        request.websocket.send(message)
-        time.sleep(5)
+        stock = SinaStock.objects.order_by('-id')[:3].values()
+        futures = SinaFutures.objects.order_by('-id')[:3].values()
+        request.websocket.send(dumps(list(stock)[::-1] + list(futures)[::-1]))
+        time.sleep(10)

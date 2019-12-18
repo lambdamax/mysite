@@ -50,32 +50,44 @@
 <script src="{{ static('/blog/js/scripts.js') }}"></script>
 {% block scripts %}
 {% endblock scripts %}
-<script>
-    $('body').on('click', function () {
-        if ("WebSocket" in window) {
-            // 打开一个 web socket
-            var ws = new WebSocket("wss://" + window.location.host + "/wb");
-
-            ws.onopen = function () {
-                // Web Socket 已连接上，使用 send() 方法发送数据
-                ws.send("发送数据");
-            };
-
-            ws.onmessage = function (evt) {
-                var received_msg = evt.data;
-                console.log(received_msg)
-            };
-
-            ws.onclose = function () {
-                // 关闭 websocket
-                console.log("websocket closed...");
-            };
-        } else {
-            // 浏览器不支持 WebSocket
-            alert("您的浏览器不支持 WebSocket!");
-        }
-    })
-
-</script>
 </body>
+<script>
+    if ("WebSocket" in window) {
+        // 打开一个 web socket
+        var ws = new WebSocket("ws://" + window.location.host + "/wb");
+
+        ws.onopen = function () {
+            // Web Socket 已连接上，使用 send() 方法发送数据
+            ws.send("发送数据");
+        };
+
+        ws.onmessage = function (evt) {
+            var received_msg = evt.data;
+            {#console.log(JSON.parse(received_msg));#}
+            var datas = JSON.parse(received_msg), info = '<table>';
+            $.each(datas, function (i, e) {
+                console.log(e)
+                if (e.hasOwnProperty('rate') && e.rate) {
+                    if (e.rate < 0) e.color = '#008000';
+                    else e.color = '#ff0000';
+                    e.rate = e.rate + '%'
+                }
+                info += '<tr>';
+                info += '<td width="80px" height="20px"><span>{name}</span></th>';
+                info += '<td width="80px" height="20px"><span style="color:{color}">{price}</span></td>';
+                info += '<td width="40px" height="20px"><span style="color:{color}">{range}</span></td>';
+                info += '<td width="40px" height="20px"><span style="color:{color}">{rate}</span></td>';
+                info += '</tr>';
+                info = info.format(e);
+            });
+            info += '</table>';
+            $('#notice').html(info)
+        };
+
+        ws.onclose = function () {
+            // 关闭 websocket
+            console.log("websocket closed...");
+        };
+    }
+</script>
 </html>
