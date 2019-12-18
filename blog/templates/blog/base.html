@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <link rel="stylesheet" type="text/css" href="{{ static('/blog/css/bootstrap.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ static('/blog/css/nprogress.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ static('/blog/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ static('/blog/css/style.css') }}?v=2">
     <link rel="stylesheet" type="text/css" href="{{ static('/blog/css/font-awesome.min.css') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ static('/blog/images/icon.png') }}">
     <link rel="shortcut icon" href="{{ static('/blog/images/favicon.ico') }}">
@@ -53,8 +53,8 @@
 </body>
 <script>
     if ("WebSocket" in window) {
-        // 打开一个 web socket
-        var ws = new WebSocket("ws://" + window.location.host + "/wb");
+        var protocol = location.protocol == 'http:' ? 'ws://' : 'wss://', old = {};
+        var ws = new WebSocket(protocol + window.location.host + "/wb");
 
         ws.onopen = function () {
             // Web Socket 已连接上，使用 send() 方法发送数据
@@ -64,24 +64,38 @@
         ws.onmessage = function (evt) {
             var received_msg = evt.data;
             {#console.log(JSON.parse(received_msg));#}
-            var datas = JSON.parse(received_msg), info = '<table>';
+            var datas = JSON.parse(received_msg),
+                info = '<table><tr>\n' +
+                    '<th width="35%" height="15px">名称</th>\n' +
+                    '<th width="30%" height="15px" align>现价</th>\n' +
+                    '<th width="25%" height="15px">涨跌</th>\n' +
+                    '<th width="10%" height="15px">涨幅</th>\n' +
+                    '</tr>';
             $.each(datas, function (i, e) {
-                console.log(e)
                 if (e.hasOwnProperty('rate') && e.rate) {
                     if (e.rate < 0) e.color = '#008000';
-                    else e.color = '#ff0000';
+                    else {
+                        e.color = '#ff0000';
+                        e.rate = '+' + e.rate;
+                    }
                     e.rate = e.rate + '%'
                 }
+                if (old[i] < e.price) e.flag = 'class="valup"';
+                else if (old[i] > e.price) e.flag = 'class="valdonw"';
                 info += '<tr>';
-                info += '<td width="80px" height="20px"><span>{name}</span></th>';
-                info += '<td width="80px" height="20px"><span style="color:{color}">{price}</span></td>';
-                info += '<td width="40px" height="20px"><span style="color:{color}">{range}</span></td>';
-                info += '<td width="40px" height="20px"><span style="color:{color}">{rate}</span></td>';
+                info += '<td><span>{name}</span></th>';
+                info += '<td><span style="color:{color}" {flag}>{price}</span></td>';
+                info += '<td><span style="color:{color}" {flag}>{range}</span></td>';
+                info += '<td><span style="color:{color}" {flag}>{rate}</span></td>';
                 info += '</tr>';
                 info = info.format(e);
+                old[i] = e.price;
             });
             info += '</table>';
-            $('#notice').html(info)
+            $('#notice').html(info);
+            setTimeout(function () {
+                $('#notice span').removeClass()
+            }, 1000);
         };
 
         ws.onclose = function () {

@@ -157,6 +157,7 @@ def sinaspider(request):
     """
     para = request.POST.dict()
     para.pop('csrfmiddlewaretoken')
+    para.pop('last_price')
     title = para.pop('title')
     item = SinaStock(**para) if title == 'stock' else SinaFutures(**para)
     item.save()
@@ -182,6 +183,6 @@ def wb(request):
     message = request.websocket.wait()
     while 1:
         stock = SinaStock.objects.order_by('-id')[:3].values()
-        futures = SinaFutures.objects.order_by('-id')[:3].values()
+        futures = SinaFutures.objects.order_by('-id')[:2].values()
         request.websocket.send(dumps(list(stock)[::-1] + list(futures)[::-1]))
         time.sleep(10)

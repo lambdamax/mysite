@@ -1496,7 +1496,8 @@ body, input, button, textarea, select {
 }
 
 .widget-tabs {
-    height: 200px;
+    /*height: 200px;*/
+    min-height: 200px;
 }
 
 .nav-tabs {
@@ -2604,4 +2605,12 @@ body, input, button, textarea, select {
 .readers a.item-readers strong {
     display: block;
     color: #666;
+}
+
+.valup {
+    background-color: lightpink;
+}
+
+.valdown {
+    background-color: lightgreen;
 }
