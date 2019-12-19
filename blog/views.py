@@ -5,7 +5,7 @@ from django.templatetags.static import static
 from django.template import defaultfilters
 from django.urls import reverse
 from django.utils.html import format_html
-from django.db.models import Max, Count
+from django.db.models import Max, Count, F, Window, functions
 import markdown
 from jinja2 import Environment
 from dwebsocket import require_websocket
@@ -182,7 +182,6 @@ def dumps(data):
 @require_websocket
 def wb(request):
     message = request.websocket.wait()
-    from django.db.models import Avg, F, Window, functions, Subquery
     while 1:
         stock = SinaStock.objects.annotate(
             rn=Window(expression=functions.RowNumber(), partition_by=[F('name')], order_by=F('id').desc())).order_by(

@@ -66,10 +66,10 @@
             {#console.log(JSON.parse(received_msg));#}
             var datas = JSON.parse(received_msg),
                 info = '<table><tr>\n' +
-                    '<th width="35%" height="15px">名称</th>\n' +
-                    '<th width="30%" height="15px" align>现价</th>\n' +
-                    '<th width="25%" height="15px">涨跌</th>\n' +
-                    '<th width="10%" height="15px">涨幅</th>\n' +
+                    '<th width="35%">名称</th>\n' +
+                    '<th width="30%">现价</th>\n' +
+                    '<th width="25%">涨跌</th>\n' +
+                    '<th width="10%">涨幅</th>\n' +
                     '</tr>';
             $.each(datas, function (i, e) {
                 if (e.hasOwnProperty('rate') && e.rate) {
