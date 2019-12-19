@@ -183,13 +183,15 @@ def dumps(data):
 def wb(request):
     message = request.websocket.wait()
     while 1:
-        stock = SinaStock.objects.annotate(
-            rn=Window(expression=functions.RowNumber(), partition_by=[F('name')], order_by=F('id').desc())).order_by(
-            'name')
-        futures = SinaFutures.objects.annotate(
-            rn=Window(expression=functions.RowNumber(), partition_by=[F('name')], order_by=F('id').desc())).order_by(
-            'name')
-        stock = stock.order_by('rn', 'id')[:3].values('price', 'rate', 'range', 'name', 'create_date')
-        futures = futures.order_by('rn', 'id')[:2].values('price', 'rate', 'range', 'name', 'create_date')
+        stock = SinaStock.objects.annotate(time=F('create_date') + '8 hours',
+                                           rn=Window(expression=functions.RowNumber(),
+                                                     partition_by=[F('name')],
+                                                     order_by=F('id').desc())).order_by('name')
+        futures = SinaFutures.objects.annotate(time=F('create_date') + '8 hours',
+                                               rn=Window(expression=functions.RowNumber(),
+                                                         partition_by=[F('name')],
+                                                         order_by=F('id').desc())).order_by('name')
+        stock = stock.order_by('rn', 'id')[:3].values('price', 'rate', 'range', 'name', 'time')
+        futures = futures.order_by('rn', 'id')[:2].values('price', 'rate', 'range', 'name', 'time')
         request.websocket.send(dumps(list(stock) + list(futures)))
         time.sleep(10)

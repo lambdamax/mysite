@@ -90,8 +90,10 @@
                 info += '</tr>';
                 info = info.format(e);
                 old[e.name] = e.price;
+                old.time = e.time;
             });
-            info += '</table>';
+            info = '<p style="font-size: 10px;color: gray;width: 100%;text-align: center;">更新时间：{time}</p>'.format(old) + info + '</table>';
+
             $('#notice').html(info);
             setTimeout(function () {
                 $('#notice span').removeClass()
