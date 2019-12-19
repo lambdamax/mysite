@@ -81,7 +81,7 @@
                     e.rate = e.rate + '%'
                 }
                 if (old[e.name] < e.price) e.flag = 'class="valup"';
-                else if (old[i] > e.price) e.flag = 'class="valdonw"';
+                else if (old[i] > e.price) e.flag = 'class="valdown"';
                 info += '<tr>';
                 info += '<td><span>{name}</span></th>';
                 info += '<td><span style="color:{color}" {flag}>{price}</span></td>';
