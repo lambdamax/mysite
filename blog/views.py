@@ -157,7 +157,8 @@ def sinaspider(request):
     """
     para = request.POST.dict()
     para.pop('csrfmiddlewaretoken')
-    para.pop('last_price')
+    if 'last_price' in para:
+        para.pop('last_price')
     title = para.pop('title')
     item = SinaStock(**para) if title == 'stock' else SinaFutures(**para)
     item.save()
@@ -181,8 +182,15 @@ def dumps(data):
 @require_websocket
 def wb(request):
     message = request.websocket.wait()
+    from django.db.models import Avg, F, Window, functions, Subquery
     while 1:
-        stock = SinaStock.objects.order_by('-id')[:3].values()
-        futures = SinaFutures.objects.order_by('-id')[:2].values()
-        request.websocket.send(dumps(list(stock)[::-1] + list(futures)[::-1]))
+        stock = SinaStock.objects.annotate(
+            rn=Window(expression=functions.RowNumber(), partition_by=[F('name')], order_by=F('id').desc())).order_by(
+            'name')
+        futures = SinaFutures.objects.annotate(
+            rn=Window(expression=functions.RowNumber(), partition_by=[F('name')], order_by=F('id').desc())).order_by(
+            'name')
+        stock = stock.order_by('rn', 'id')[:3].values('price', 'rate', 'range', 'name', 'create_date')
+        futures = futures.order_by('rn', 'id')[:2].values('price', 'rate', 'range', 'name', 'create_date')
+        request.websocket.send(dumps(list(stock) + list(futures)))
         time.sleep(10)

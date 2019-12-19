@@ -80,7 +80,7 @@
                     }
                     e.rate = e.rate + '%'
                 }
-                if (old[i] < e.price) e.flag = 'class="valup"';
+                if (old[e.name] < e.price) e.flag = 'class="valup"';
                 else if (old[i] > e.price) e.flag = 'class="valdonw"';
                 info += '<tr>';
                 info += '<td><span>{name}</span></th>';
@@ -89,7 +89,7 @@
                 info += '<td><span style="color:{color}" {flag}>{rate}</span></td>';
                 info += '</tr>';
                 info = info.format(e);
-                old[i] = e.price;
+                old[e.name] = e.price;
             });
             info += '</table>';
             $('#notice').html(info);
