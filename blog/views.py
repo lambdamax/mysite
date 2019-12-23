@@ -6,6 +6,7 @@ from django.template import defaultfilters
 from django.urls import reverse
 from django.utils.html import format_html
 from django.db.models import Max, Count, F, Window, functions
+from django.db import connection
 import markdown
 from jinja2 import Environment
 from dwebsocket import require_websocket
@@ -194,4 +195,6 @@ def wb(request):
         stock_values = stock.order_by('rn', 'id')[:3].values('price', 'rate', 'range', 'name', 'time')
         futures_values = futures.order_by('rn', 'id')[:2].values('price', 'rate', 'range', 'name', 'time')
         request.websocket.send(dumps(list(stock_values) + list(futures_values)))
+        # 关闭数据库查询连接，解决重复刷新时总是会打开新的查询进程
+        connection.close()
         time.sleep(10)
