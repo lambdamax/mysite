@@ -113,7 +113,8 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': 5432,
         'USER': 'runner',
-        'PASSWORD': 'runner'
+        'PASSWORD': 'runner',
+        # 'CONN_MAX_AGE': 10,
     }
 }
 
@@ -140,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 

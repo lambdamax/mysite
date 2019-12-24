@@ -58,7 +58,7 @@
 
         ws.onopen = function () {
             // Web Socket 已连接上，使用 send() 方法发送数据
-            ws.send("发送数据");
+            ws.send("WebSocket open");
         };
 
         ws.onmessage = function (evt) {
