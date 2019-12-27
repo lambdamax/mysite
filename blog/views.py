@@ -185,11 +185,11 @@ def wb(request):
     if not request.is_websocket():
         return HttpResponse('Accpect Websocket Only')
     message = request.websocket.wait()
-    stock = SinaStock.objects.annotate(time=F('create_date'),
+    stock = SinaStock.objects.annotate(time=F('create_date') + '8 hours',
                                        rn=Window(expression=functions.RowNumber(),
                                                  partition_by=[F('name')],
                                                  order_by=F('id').desc())).order_by('name')
-    futures = SinaFutures.objects.annotate(time=F('create_date'),
+    futures = SinaFutures.objects.annotate(time=F('create_date') + '8 hours',
                                            rn=Window(expression=functions.RowNumber(),
                                                      partition_by=[F('name')],
                                                      order_by=F('id').desc())).order_by('name')
