@@ -180,22 +180,6 @@ def dumps(data):
     return result
 
 
-def close_connection():
-    """Closes the connection if we are not in an atomic block.
-
-    The connection should never be closed if we are in an atomic block, as
-    happens when running tests as part of a django TestCase. Otherwise, closing
-    the connection is important to avoid a connection time out after long actions.
-    Django does not automatically refresh a connection which has been closed
-    due to idleness (this normally happens in the request start/finish part
-    of a webapp's lifecycle, which this process does not have), so we must
-    do it ourselves if the connection goes idle due to stuff taking a really
-    long time.
-    """
-    if not connection.in_atomic_block:
-        connection.close()
-
-
 @require_websocket
 def wb(request):
     if not request.is_websocket():
@@ -210,16 +194,15 @@ def wb(request):
                                                      partition_by=[F('name')],
                                                      order_by=F('id').desc())).order_by('name')
     start_time = time.time()
-    print(request.websocket.is_close())
-    while 1:
-        if time.time() - start_time > 21:
+    while not request.websocket.closed:
+        # 2mins断开一次
+        if time.time() - start_time > 120:
             request.websocket.send('Connection Limited')
+            time.sleep(3)
             request.websocket.close()
-        stock_values = stock.order_by('rn', 'id')[:3].values('price', 'rate', 'range', 'name', 'time')
-        futures_values = futures.order_by('rn', 'id')[:2].values('price', 'rate', 'range', 'name', 'time')
-        print('11111111111111111111111111111')
-        r = request.websocket.send(dumps(list(stock_values) + list(futures_values)))
-        print(r)
-        # 关闭数据库查询连接，解决重复刷新时总是会打开新的查询进程
-        close_connection()
-        time.sleep(10)
+            time.sleep(3)
+        else:
+            stock_values = stock.order_by('rn', 'id')[:3].values('price', 'rate', 'range', 'name', 'time')
+            futures_values = futures.order_by('rn', 'id')[:2].values('price', 'rate', 'range', 'name', 'time')
+            request.websocket.send(dumps(list(stock_values) + list(futures_values)))
+            time.sleep(10)

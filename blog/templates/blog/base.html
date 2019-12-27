@@ -53,24 +53,31 @@
 </body>
 <script>
     if ("WebSocket" in window) {
-        var protocol = location.protocol == 'http:' ? 'ws://' : 'wss://', old = {};
-        var ws = new WebSocket(protocol + window.location.host + "/wb");
+        var protocol = location.protocol == 'http:' ? 'ws://' : 'wss://',
+            old = {}, ws;
+        ConnectWs();
+    }
 
+    function ConnectWs() {
+        ws = new WebSocket(protocol + window.location.host + "/wb");
+        WsOptions();
+    }
+
+    function WsOptions() {
         ws.onopen = function () {
-            // Web Socket 已连接上，使用 send() 方法发送数据
-            ws.send("WebSocket open");
+            ws.send("ws open");
         };
 
         ws.onmessage = function (evt) {
             var received_msg = evt.data;
-            {#console.log(JSON.parse(received_msg));#}
-            var datas = JSON.parse(received_msg),
-                info = '<table><tr>\n' +
-                    '<th width="35%">名称</th>\n' +
-                    '<th width="30%">现价</th>\n' +
-                    '<th width="25%">涨跌</th>\n' +
-                    '<th width="10%">涨幅</th>\n' +
-                    '</tr>';
+            if (received_msg == 'Connection Limited') return ws.close();
+            var datas = JSON.parse(received_msg);
+            var info = '<table><tr>\n' +
+                '<th width="35%">名称</th>\n' +
+                '<th width="30%">现价</th>\n' +
+                '<th width="25%">涨跌</th>\n' +
+                '<th width="10%">涨幅</th>\n' +
+                '</tr>';
             $.each(datas, function (i, e) {
                 if (e.hasOwnProperty('rate') && e.rate) {
                     if (e.rate < 0) e.color = '#008000';
@@ -101,8 +108,11 @@
         };
 
         ws.onclose = function () {
-            // 关闭 websocket
-            console.log("websocket closed...");
+            ConnectWs();
+        };
+
+        ws.onerror = function (e) {
+            console.log(e);
         };
     }
 </script>
