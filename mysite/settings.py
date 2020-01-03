@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog',
     'mdeditor',
-    'dwebsocket'
+    'dwebsocket',
+    'rest_framework'
 ]
 
 # model Users inherit from AbstractUser

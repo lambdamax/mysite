@@ -1,3 +1,4 @@
+djangorestframework
 dwebsocket
 Django==2.2
 django-mdeditor==0.1.13

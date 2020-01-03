@@ -6,6 +6,7 @@ from django.template import defaultfilters
 from django.urls import reverse
 from django.utils.html import format_html
 from django.db.models import Max, Count, F, Window, functions
+from django.middleware.csrf import get_token
 from django.db import connection
 import markdown
 from jinja2 import Environment
@@ -144,26 +145,20 @@ def catalog_list(request, catalog):
     return render(request, 'blog/list.html', context=g)
 
 
-def get_token(request):
-    from django.middleware.csrf import get_token
-    token = get_token(request)
-    return HttpResponse(token)
-
-
-def sinaspider(request):
-    """
-    爬虫写表
-    :param request:
-    :return:
-    """
-    para = request.POST.dict()
-    para.pop('csrfmiddlewaretoken')
-    if 'last_price' in para:
-        para.pop('last_price')
-    title = para.pop('title')
-    item = SinaStock(**para) if title == 'stock' else SinaFutures(**para)
-    item.save()
-    return HttpResponse('ok')
+# def sinaspider(request):
+#     """
+#     爬虫写表
+#     :param request:
+#     :return:
+#     """
+#     para = request.POST.dict()
+#     para.pop('csrfmiddlewaretoken')
+#     if 'last_price' in para:
+#         para.pop('last_price')
+#     title = para.pop('title')
+#     item = SinaStock(**para) if title == 'stock' else SinaFutures(**para)
+#     item.save()
+#     return HttpResponse('ok')
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -206,3 +201,31 @@ def wb(request):
             futures_values = futures.order_by('rn', 'id')[:2].values('price', 'rate', 'range', 'name', 'time')
             request.websocket.send(dumps(list(stock_values) + list(futures_values)))
             time.sleep(10)
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+
+class SinaSpider(APIView):
+    def get(self, request):
+        token = ''
+        if request.query_params.get('get_token'):
+            token = get_token(request)
+        return Response(token)
+
+    def post(self, request):
+        para = request.POST.dict()
+        para.pop('csrfmiddlewaretoken')
+        if 'last_price' in para:
+            para.pop('last_price')
+        title = para.pop('title')
+        if title == 'stock':
+            item = SinaStock(**para)
+            item.save()
+            # print(StockSerializer(item))
+        else:
+            item = SinaFutures(**para)
+            item.save()
+            # print(FuturesSerializer(item))
+        return Response('ok')

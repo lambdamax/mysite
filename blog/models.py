@@ -169,3 +169,18 @@ class SinaFutures(Common):
 
     def __str__(self):
         return str(self.id) + '--' + self.name
+
+
+from rest_framework import serializers
+
+
+class StockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SinaStock
+        fields = ('price', 'rate', 'range', 'name')
+
+
+class FuturesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SinaFutures
+        fields = ('price', 'rate', 'range', 'name')
