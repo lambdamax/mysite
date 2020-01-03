@@ -1,9 +1,12 @@
 {% extends 'blog/base.html' %}
 
-
 {% block body_attribs %}
     class="user-select"
 {% endblock body_attribs %}
+
+{% block nav %}
+    {% include 'blog/nav.html' %}
+{% endblock nav %}
 
 {% block content %}
     <div id="focusslide" class="carousel slide" data-ride="carousel">
@@ -50,11 +53,9 @@
             </p>
         </article>
     {% endfor %}
-
     {% include 'blog/articles_list.html' %}
 {% endblock content %}
 
-{% block sidebar %}
-    {% include 'blog/notepad.html' %}
-{% endblock sidebar %}
-
+{% block scripts %}
+    <script src="{{ static('/blog/js/ws.js') }}"></script>
+{% endblock scripts %}

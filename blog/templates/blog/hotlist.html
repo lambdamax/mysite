@@ -1,23 +1,26 @@
-<div class="widget widget_hot">
-    <h3>最新评论文章</h3>
-    <ul>
-        {% for hot in hots %}
-            <li>
-                <a title="{{ hot.name }}" href="{{ url('detail',num=hot.id) }}">
+<aside class="sidebar">
+    {% include 'blog/notepad.html' %}
+    <div class="widget widget_hot">
+        <h3>最新评论文章</h3>
+        <ul>
+            {% for hot in hots %}
+                <li>
+                    <a title="{{ hot.name }}" href="{{ url('detail',num=hot.id) }}">
                         <span class="thumbnail">
                             <img class="thumb" data-original="{{ hot.photo.url }}"
                                  src="{{ hot.photo.url }}"
                                  alt="{{ hot.name }}" style="display: block;">
                         </span>
-                    <span class="text">{{ hot.name }}</span>
-                    <span class="muted">
+                        <span class="text">{{ hot.name }}</span>
+                        <span class="muted">
                         <i class="glyphicon glyphicon-time"></i>&nbsp;{{ dj.date(hot.create_date,"Y-m-d") }}
                     </span>
-                    <span class="muted">
+                        <span class="muted">
                         <i class="glyphicon glyphicon-comment"></i>&nbsp;{{ hot.comments.all()|length }}
                     </span>
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</aside>

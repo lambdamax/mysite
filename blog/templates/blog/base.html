@@ -23,7 +23,8 @@
 </head>
 <body {% block body_attribs %}{% endblock body_attribs %}>
 {% block body %}
-    {% include 'blog/nav.html' %}
+    {% block nav %}
+    {% endblock nav %}
     <section class="container">
         <div class="content-wrap">
             <div class="content">
@@ -31,11 +32,7 @@
                 {% endblock content %}
             </div>
         </div>
-        <aside class="sidebar">
-            {% block sidebar %}
-            {% endblock sidebar %}
-            {% include 'blog/hotlist.html' %}
-        </aside>
+        {% include 'blog/hotlist.html' %}
     </section>
 {% endblock body %}
 <footer class="footer">

@@ -5,6 +5,10 @@
     class="user-select"
 {% endblock body_attribs %}
 
+{% block nav %}
+    {% include 'blog/nav.html' %}
+{% endblock nav %}
+
 {% block content %}
     {% include 'blog/articles_list.html' %}
 {% endblock content %}
