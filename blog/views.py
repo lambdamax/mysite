@@ -191,9 +191,8 @@ def wb(request):
     start_time = time.time()
     while not request.websocket.closed:
         # 2mins断开一次
-        if time.time() - start_time > 120:
+        if time.time() - start_time > 60:
             request.websocket.send('Connection Limited')
-            time.sleep(3)
             request.websocket.close()
             time.sleep(3)
         else:
