@@ -25,7 +25,7 @@
                 <i class="glyphicon glyphicon-comment"></i> {{ article.comments.all()|length }}
             </a>
         </p>
-        <p class="note">{{ article.body|truncate(100, True) }}</p>
+        <p class="note">{{ article.desc|truncate(100, True) }}</p>
     </article>
 {% endfor %}
 {% if not para.keyword %}

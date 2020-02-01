@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
 from mdeditor.fields import MDTextField
-
+import re
 from mysite.settings import AUTH_USER_MODEL
 
 
@@ -90,13 +90,21 @@ class Articles(Common):
     tags = models.ManyToManyField(Tag, through='Articleship', through_fields=('article', 'tag'))
 
     def image_data(self):
-        print(self.photo.url)
         return format_html(
             '<img src="{}" width="100px"/>',
             self.photo.url if self.photo else None,
         )
 
     image_data.short_description = '图片'
+
+    @property
+    def desc(self):
+        """
+        body去标签
+        :return:
+        """
+        r = re.compile(r'<[^>]+>', re.S)
+        return r.sub('', self.body)
 
     class Meta:
         db_table = 'blog_article'
