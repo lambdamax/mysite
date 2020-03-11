@@ -192,3 +192,15 @@ class FuturesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SinaFutures
         fields = ('price', 'rate', 'range', 'name')
+
+
+# ==================================测试======================================
+# class Rtdb_v(models.Model):
+#     login = models.CharField(verbose_name='登录名', max_length=50)
+#
+#     class Meta:
+#         managed = False
+#         db_table = 'rtdb_res_user_v'
+#         ordering = ["-id"]
+#         verbose_name_plural = _(u"DBLINK VIEW")
+#         app_label = 'blog'

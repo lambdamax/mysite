@@ -37,3 +37,11 @@ admin.site.register(models.Comment)
 admin.site.register(models.Link)
 admin.site.register(models.SinaFutures)
 admin.site.register(models.SinaStock)
+
+
+# @admin.register(models.Rtdb_v)
+# class Rtdb_v_Admin(admin.ModelAdmin):
+#     empty_value_display = '-empty-'
+#     list_display = ('id', 'login',)
+
+# admin.site.register(models.Rtdb_v)
