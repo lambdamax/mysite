@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'blog',
     'mdeditor',
     'dwebsocket',
-    'rest_framework'
+    'rest_framework',
+    'drf_yasg'
 ]
 
 # model Users inherit from AbstractUser

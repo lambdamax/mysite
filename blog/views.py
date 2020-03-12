@@ -204,15 +204,24 @@ def wb(request):
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from .serializers import ArticlesSerializer
+
+test_param = openapi.Parameter('get_token', openapi.IN_QUERY, description="是否要获得token",
+                               type=openapi.TYPE_STRING)
 
 
 class SinaSpider(APIView):
+    @swagger_auto_schema(manual_parameters=[test_param], operation_description="获取token")
     def get(self, request):
         token = ''
         if request.query_params.get('get_token'):
             token = get_token(request)
         return Response(token)
 
+    @swagger_auto_schema(operation_description="获取token",
+                         query_serializer=ArticlesSerializer, )
     def post(self, request):
         para = request.POST.dict()
         para.pop('csrfmiddlewaretoken')
