@@ -145,22 +145,6 @@ def catalog_list(request, catalog):
     return render(request, 'blog/list.html', context=g)
 
 
-# def sinaspider(request):
-#     """
-#     爬虫写表
-#     :param request:
-#     :return:
-#     """
-#     para = request.POST.dict()
-#     para.pop('csrfmiddlewaretoken')
-#     if 'last_price' in para:
-#         para.pop('last_price')
-#     title = para.pop('title')
-#     item = SinaStock(**para) if title == 'stock' else SinaFutures(**para)
-#     item.save()
-#     return HttpResponse('ok')
-
-
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
         try:
