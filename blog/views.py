@@ -171,7 +171,7 @@ def wb(request):
     futures = SinaFutures.objects.annotate(time=F('create_date') + '8 hours',
                                            rn=Window(expression=functions.RowNumber(),
                                                      partition_by=[F('name')],
-                                                     order_by=F('id').desc())).order_by('name')
+                                                     order_by=F('id').desc()))
     start_time = time.time()
     while not request.websocket.closed:
         # 2mins断开一次
