@@ -2,7 +2,7 @@ djangorestframework
 dwebsocket
 Django==2.2
 django-mdeditor==0.1.13
-Jinja2==2.10
+Jinja2==2.11.3
 Markdown==3.1
 MarkupSafe==1.1.1
 Pillow==6.0.0
